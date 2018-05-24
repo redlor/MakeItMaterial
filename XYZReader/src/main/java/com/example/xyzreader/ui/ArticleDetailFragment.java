@@ -8,7 +8,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -162,7 +162,6 @@ public class ArticleDetailFragment extends Fragment implements
 
         SubtitleCollapsingToolbarLayout collapsingToolbarLayout = (SubtitleCollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_bar_layout);
 
-        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
         final Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.details_toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +174,8 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setVisibility(View.VISIBLE);
             if (collapsingToolbarLayout != null)
                 collapsingToolbarLayout.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
+            toolbar.setTitleTextColor(Color.WHITE);
+            toolbar.setSubtitleTextColor(Color.WHITE);
             Date publishedDate = parsePublishedDate();
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
                 if (collapsingToolbarLayout != null)
@@ -191,19 +192,22 @@ public class ArticleDetailFragment extends Fragment implements
                 // If date is before 1902, just show the string
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     toolbar.setSubtitle(Html.fromHtml(
-                            outputFormat.format(publishedDate) + " by <font color='#ffffff'>"
+                            outputFormat.format(publishedDate)
+                                    + " by <font color='#ffffff'>"
                                     + mCursor.getString(ArticleLoader.Query.AUTHOR)
                                     + "</font>"));
                 } else if (collapsingToolbarLayout != null)
                     collapsingToolbarLayout.setSubtitle(Html.fromHtml(
-                            outputFormat.format(publishedDate) + " by <font color='#ffffff'>"
+                            outputFormat.format(publishedDate)
+                                    + " by <font color='#ffffff'>"
                                     + mCursor.getString(ArticleLoader.Query.AUTHOR)
                                     + "</font>"));
 
             }
 
-
-            bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            toolbar.setTitleTextColor(Color.WHITE);
+            toolbar.setSubtitleTextColor(Color.WHITE);
+            bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY)));
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
